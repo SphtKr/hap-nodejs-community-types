@@ -9,6 +9,38 @@ module.exports = function(homebridge) {
 
   // Characteristics
 
+  CommunityTypes.Timestamp = function() {
+    Characteristic.call(this, "Timestamp", CommunityTypes.Timestamp.UUID);
+    this.setProps({
+      format: Characteristic.Formats.STRING,
+      perms: [Characteristic.Perms.READ, Characteristic.Perms.WRITE, Characteristic.Perms.NOTIFY]
+    });
+    this.value = this.getDefaultValue();
+  }
+  CommunityTypes.AudioDataURL.UUID = 'FF000001-0000-1000-8000-135D67EC4377'
+  inherits(CommunityTypes.AudioDataURL, Characteristic);
+
+  CommunityTypes.AudioDataURL = function() {
+    Characteristic.call(this, "Audio URL", CommunityTypes.AudioDataURL.UUID);
+    this.setProps({
+      format: Characteristic.Formats.STRING,
+      perms: [Characteristic.Perms.READ, Characteristic.Perms.WRITE, Characteristic.Perms.NOTIFY]
+    });
+  }
+  CommunityTypes.AudioDataURL.UUID = 'FF000002-0000-1000-8000-135D67EC4377'
+  inherits(CommunityTypes.AudioDataURL, Characteristic);
+
+  CommunityTypes.VideoDataURL = function() {
+    Characteristic.call(this, "Video URL", CommunityTypes.VideoDataURL.UUID);
+    this.setProps({
+      format: Characteristic.Formats.STRING,
+      perms: [Characteristic.Perms.READ, Characteristic.Perms.WRITE, Characteristic.Perms.NOTIFY]
+    });
+  }
+  CommunityTypes.VideoDataURL.UUID = 'FF000003-0000-1000-8000-135D67EC4377'
+  inherits(CommunityTypes.VideoDataURL, Characteristic);
+
+
   CommunityTypes.AudioVolume = function() {
     Characteristic.call(this, 'Audio Volume', CommunityTypes.AudioVolume.UUID);
     this.setProps({
@@ -295,6 +327,25 @@ module.exports = function(homebridge) {
   };
   CommunityTypes.StillImageService.UUID = '00000004-0000-1000-8000-135D67EC4377';
   inherits(CommunityTypes.StillImageService, Service);
+
+  CommunityTypes.SecurityCameraService = function(displayName, subtype) {
+    Service.call(this, displayName, CommunityTypes.SecurityCameraService.UUID, subtype);
+
+    // Required Characteristics
+    this.addCharacteristic(CommunityTypes.StillImageService);
+    this.addCharacteristic(CommunityTypes.MediaTypeIdentifier);
+
+    // Optional Characteristics
+    this.addOptionalCharacteristic(CommunityTypes.Timestamp);
+    this.addOptionalCharacteristic(CommunityTypes.MediaWidth);
+    this.addOptionalCharacteristic(CommunityTypes.MediaHeight);
+    this.addOptionalCharacteristic(CommunityTypes.VideoDataURL);
+    this.addOptionalCharacteristic(CommunityTypes.AudioDataURL);
+    this.addOptionalCharacteristic(Characteristic.MotionDetected);
+    this.addOptionalCharacteristic(Characteristic.StatusTampered);
+    this.addOptionalCharacteristic(Characteristic.Name);
+  }
+  CommunityTypes.SecurityCameraService.UUID = '00000005-0000-1000-8000-135D67EC4377';
 
   return CommunityTypes;
 };
